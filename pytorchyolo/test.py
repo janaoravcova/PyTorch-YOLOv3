@@ -106,7 +106,11 @@ def _evaluate(model, dataloader, class_names, img_size, iou_thres, conf_thres, n
     metrics_for_thresholds = [[None]]*18
     for i in range(18):
         metrics_for_thresholds[i] = []
+    counter = 0
     for _, imgs, targets in tqdm.tqdm(dataloader, desc="Validating"):
+        if counter == 2:
+            break
+        counter += 1
         # Extract labels
         labels += targets[:, 1].tolist()
         # Rescale target
