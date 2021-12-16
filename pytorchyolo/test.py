@@ -103,7 +103,7 @@ def _evaluate(model, dataloader, class_names, img_size, iou_thres, conf_thres, n
 
     labels = []
     sample_metrics = []  # List of tuples (TP, confs, pred)
-    metrics_for_thresholds = [[None]]*18
+    metrics_for_thresholds = [[None]]*19
     for i in range(19):
         metrics_for_thresholds[i] = []
     for _, imgs, targets in tqdm.tqdm(dataloader, desc="Validating"):
@@ -121,7 +121,7 @@ def _evaluate(model, dataloader, class_names, img_size, iou_thres, conf_thres, n
 
         sample_metrics += get_batch_statistics(outputs, targets, iou_threshold=iou_thres)
         # create all AP
-        thresholds = np.arange(0.05, 0.95, 0.05)
+        thresholds = np.arange(0.05, 1.0, 0.05)
         for i, threshold in enumerate(thresholds):
             metrics_for_thresholds[i] += get_batch_statistics(outputs, targets, iou_threshold=threshold)
 
