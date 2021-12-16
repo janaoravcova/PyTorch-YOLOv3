@@ -103,6 +103,9 @@ def _evaluate(model, dataloader, class_names, img_size, iou_thres, conf_thres, n
 
     labels = []
     sample_metrics = []  # List of tuples (TP, confs, pred)
+    metrics_for_thresholds = [[None]]*18
+    for i in range(18):
+        metrics_for_thresholds[i] = []
     for _, imgs, targets in tqdm.tqdm(dataloader, desc="Validating"):
         # Extract labels
         labels += targets[:, 1].tolist()
@@ -117,10 +120,23 @@ def _evaluate(model, dataloader, class_names, img_size, iou_thres, conf_thres, n
             outputs = non_max_suppression(outputs, conf_thres=conf_thres, iou_thres=nms_thres)
 
         sample_metrics += get_batch_statistics(outputs, targets, iou_threshold=iou_thres)
+        # create all AP
+        thresholds = np.arange(0.05, 0.95, 0.05);
+        for i, threshold in enumerate(thresholds):
+            metrics_for_thresholds[i].append(get_batch_statistics(outputs, targets, iou_threshold=threshold))
 
-    if len(sample_metrics) == 0:  # No detections over whole validation set.
-        print("---- No detections over whole validation set ----")
-        return None
+    for i in range(18):
+        metrics = metrics_for_thresholds[i]
+        true_positives, pred_scores, pred_labels = [
+            np.concatenate(x, 0) for x in list(zip(*metrics))]
+        metrics_output = ap_per_class(
+            true_positives, pred_scores, pred_labels, labels)
+        print(f"---- AP {0.05+i*0.05:.5f} ----")
+        print_eval_stats(metrics_output, class_names, verbose)
+
+    # if len(sample_metrics) == 0:  # No detections over whole validation set.
+    #     print("---- No detections over whole validation set ----")
+    #     return None
 
     # Concatenate sample statistics
     true_positives, pred_scores, pred_labels = [
