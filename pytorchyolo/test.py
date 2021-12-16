@@ -104,7 +104,7 @@ def _evaluate(model, dataloader, class_names, img_size, iou_thres, conf_thres, n
     labels = []
     sample_metrics = []  # List of tuples (TP, confs, pred)
     metrics_for_thresholds = [[None]]*18
-    for i in range(18):
+    for i in range(19):
         metrics_for_thresholds[i] = []
     counter = 0
     for _, imgs, targets in tqdm.tqdm(dataloader, desc="Validating"):
@@ -133,14 +133,14 @@ def _evaluate(model, dataloader, class_names, img_size, iou_thres, conf_thres, n
     with open('results.txt', 'a') as file_object:
         line = ''
         sumAP = 0
-        for i in range(18):
+        for i in range(19):
             metrics = metrics_for_thresholds[i]
             true_positives, pred_scores, pred_labels = [
                 np.concatenate(x, 0) for x in list(zip(*metrics))]
             metrics_output = ap_per_class(
                 true_positives, pred_scores, pred_labels, labels)
             print(f"---- AP {0.05+i*0.05:.5f} ----")
-            # print_eval_stats(metrics_output, class_names, verbose)
+            print_eval_stats(metrics_output, class_names, verbose)
             precision, recall, AP, f1, ap_class = metrics_output
             line += str(AP[0]) + ' '
             sumAP += AP[0]
