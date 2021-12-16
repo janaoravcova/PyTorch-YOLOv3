@@ -142,8 +142,8 @@ def _evaluate(model, dataloader, class_names, img_size, iou_thres, conf_thres, n
             print(f"---- AP {0.05+i*0.05:.5f} ----")
             # print_eval_stats(metrics_output, class_names, verbose)
             precision, recall, AP, f1, ap_class = metrics_output
-            line += str(AP[i]) + ' '
-            sumAP += AP[i]
+            line += str(AP[0]) + ' '
+            sumAP += AP[0]
         line += str(sumAP) + '\n'
         file_object.write(line)
 
