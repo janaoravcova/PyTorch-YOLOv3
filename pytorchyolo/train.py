@@ -231,7 +231,7 @@ def run():
         # Evaluate
         # ########
 
-        if epoch % args.evaluation_interval == 0:
+        if True:
             print("\n---- Evaluating Model ----")
             # Evaluate the model on the validation set
             metrics_output = _evaluate(
