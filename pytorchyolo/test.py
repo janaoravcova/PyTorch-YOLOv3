@@ -127,12 +127,13 @@ def _evaluate(model, dataloader, class_names, img_size, iou_thres, conf_thres, n
 
     for i in range(18):
         metrics = metrics_for_thresholds[i]
-        true_positives, pred_scores, pred_labels = [
+        tmp = [
             np.concatenate(x, 0) for x in list(zip(*metrics))]
-        metrics_output = ap_per_class(
-            true_positives, pred_scores, pred_labels, labels)
+        print(tmp)
+        # metrics_output = ap_per_class(
+        #     true_positives, pred_scores, pred_labels, labels)
         print(f"---- AP {0.05+i*0.05:.5f} ----")
-        print_eval_stats(metrics_output, class_names, verbose)
+        # print_eval_stats(metrics_output, class_names, verbose)
 
     # if len(sample_metrics) == 0:  # No detections over whole validation set.
     #     print("---- No detections over whole validation set ----")
