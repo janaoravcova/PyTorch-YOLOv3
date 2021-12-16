@@ -125,19 +125,18 @@ def _evaluate(model, dataloader, class_names, img_size, iou_thres, conf_thres, n
 
         sample_metrics += get_batch_statistics(outputs, targets, iou_threshold=iou_thres)
         # create all AP
-        thresholds = np.arange(0.05, 0.95, 0.05);
+        thresholds = np.arange(0.05, 0.95, 0.05)
         for i, threshold in enumerate(thresholds):
-            metrics_for_thresholds[i].append(get_batch_statistics(outputs, targets, iou_threshold=threshold))
+            metrics_for_thresholds[i] += get_batch_statistics(outputs, targets, iou_threshold=threshold)
 
     for i in range(18):
         metrics = metrics_for_thresholds[i]
-        tmp = [
+        true_positives, pred_scores, pred_labels = [
             np.concatenate(x, 0) for x in list(zip(*metrics))]
-        print(tmp)
-        # metrics_output = ap_per_class(
-        #     true_positives, pred_scores, pred_labels, labels)
+        metrics_output = ap_per_class(
+            true_positives, pred_scores, pred_labels, labels)
         print(f"---- AP {0.05+i*0.05:.5f} ----")
-        # print_eval_stats(metrics_output, class_names, verbose)
+        print_eval_stats(metrics_output, class_names, verbose)
 
     # if len(sample_metrics) == 0:  # No detections over whole validation set.
     #     print("---- No detections over whole validation set ----")
