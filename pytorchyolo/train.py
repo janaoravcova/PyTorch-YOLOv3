@@ -4,6 +4,8 @@ from __future__ import division
 
 import os
 import argparse
+from collections import Counter
+
 import tqdm
 
 import torch
@@ -54,7 +56,7 @@ def _create_data_loader(img_path, batch_size, img_size, n_cpu, multiscale_traini
         pin_memory=True,
         collate_fn=dataset.collate_fn,
         worker_init_fn=worker_seed_set)
-    return dataloader
+    return dataloader, dataset
 
 
 def run():
@@ -110,7 +112,7 @@ def run():
     # #################
 
     # Load training dataloader
-    dataloader = _create_data_loader(
+    dataloader, dataset = _create_data_loader(
         train_path,
         mini_batch_size,
         model.hyperparams['height'],
@@ -118,11 +120,15 @@ def run():
         args.multiscale_training)
 
     # Load validation dataloader
-    validation_dataloader = _create_validation_data_loader(
+    validation_dataloader, _ = _create_validation_data_loader(
         valid_path,
         mini_batch_size,
         model.hyperparams['height'],
         args.n_cpu)
+
+    train_classes = [dataset.targets[i] for i in dataset.indices]
+    Counter(train_classes)  # if doesn' work: Counter(i.item() for i in train_classes)
+    print(dict(Counter(train_classes)))
 
     # ################
     # Create optimizer
