@@ -137,11 +137,11 @@ def _evaluate(model, dataloader, class_names, img_size, iou_thres, conf_thres, n
                 true_positives, pred_scores, pred_labels, labels)
             print(f"---- AP {0.05+i*0.05:.5f} ----")
             print_eval_stats(metrics_output, class_names, verbose)
-            precision, recall, AP, f1, ap_class = metrics_output
-            line += str(AP[0]) + ' '
-            sumAP += AP[0]
-        line += str(sumAP) + '\n'
-        file_object.write(line)
+            # precision, recall, AP, f1, ap_class = metrics_output
+            # line += str(AP[0]) + ' '
+            # sumAP += AP[0]
+        # line += str(sumAP) + '\n'
+        # file_object.write(line)
 
 
     # if len(sample_metrics) == 0:  # No detections over whole validation set.
