@@ -56,7 +56,7 @@ def _create_data_loader(img_path, batch_size, img_size, n_cpu, multiscale_traini
         pin_memory=True,
         collate_fn=dataset.collate_fn,
         worker_init_fn=worker_seed_set)
-    return dataloader, dataset
+    return dataloader
 
 
 def run():
@@ -126,9 +126,9 @@ def run():
         model.hyperparams['height'],
         args.n_cpu)
 
-    train_classes = [dataset.targets[i] for i in dataset.indices]
-    Counter(train_classes)  # if doesn' work: Counter(i.item() for i in train_classes)
-    print(dict(Counter(train_classes)))
+    # train_classes = [dataset.targets[i] for i in dataset.indices]
+    # Counter(train_classes)  # if doesn' work: Counter(i.item() for i in train_classes)
+    # print(dict(Counter(train_classes)))
 
     # ################
     # Create optimizer
