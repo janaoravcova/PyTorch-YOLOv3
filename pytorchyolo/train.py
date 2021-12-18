@@ -202,16 +202,16 @@ def run():
             # ############
             # Log progress
             # ############
-            # if args.verbose:
-            #     print(AsciiTable(
-            #         [
-            #             ["Type", "Value"],
-            #             ["IoU loss", float(loss_components[0])],
-            #             ["Object loss", float(loss_components[1])],
-            #             ["Class loss", float(loss_components[2])],
-            #             ["Loss", float(loss_components[3])],
-            #             ["Batch loss", to_cpu(loss).item()],
-            #         ]).table)
+            if args.verbose:
+                print(AsciiTable(
+                    [
+                        ["Type", "Value"],
+                        ["IoU loss", float(loss_components[0])],
+                        ["Object loss", float(loss_components[1])],
+                        ["Class loss", float(loss_components[2])],
+                        ["Loss", float(loss_components[3])],
+                        ["Batch loss", to_cpu(loss).item()],
+                    ]).table)
 
             # Tensorboard logging
             tensorboard_log = [
